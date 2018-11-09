@@ -1,0 +1,25 @@
+{
+  "name": "pekazoid",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^10.12.4",
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ungear/pekazoid.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ungear/pekazoid/issues"
+  },
+  "homepage": "https://github.com/ungear/pekazoid#readme"
+}
