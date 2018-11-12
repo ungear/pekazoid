@@ -8,7 +8,10 @@
     "@types/node": "^10.12.4",
     "axios": "^0.18.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.6"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
