@@ -9,11 +9,25 @@ const axiosInstance = axios.create({
   params: { apikey: CONFIG.ocrApiKey }
 });
 
-export async function getRecognitionData(imageUrl: string) {
+async function getRecognitionData(imageUrl: string) {
   imageUrl = imageUrl.replace(/\%\{width\}/, IMAGE_WIDTH.toString());
   imageUrl = imageUrl.replace(/\%\{height\}/, IMAGE_HEIGHT.toString());
-  let resp = await axiosInstance.get("", {
-    params: { url: imageUrl }
-  });
-  return resp.data.ParsedResults[0].ParsedText;
+  try {
+    let resp = await axiosInstance.get("", {
+      params: { url: imageUrl, language: "rus" }
+    });
+    return resp.data;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function getLinkFromImage(imageUrl: string) {
+  if (imageUrl === "") return null;
+  let recData = await getRecognitionData(imageUrl);
+  let text = recData.ParsedResults[0].ParsedText;
+  let link = text.replace(/(.*)(goo.gl\/\w*) (.*)/m, "$2");
+  return text.indexOf("goo.gl") > 0
+    ? text.replace(/(.*)(goo.gl\/\w*) (.*)/m, "$2")
+    : null;
 }
