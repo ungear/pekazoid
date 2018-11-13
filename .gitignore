@@ -61,4 +61,4 @@ typings/
 .next
 
 /config.ts
-1_get_ids/result.json
+/temp-videos.json
