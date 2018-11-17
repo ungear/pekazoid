@@ -13,7 +13,7 @@ async function main() {
     saveVideosData(videosData);
   }
 
-  let googleLink = await getLinkFromImage(videosData[42].thumbnail_url);
+  let googleLink = await getLinkFromImage(videosData[41].thumbnail_url);
 
   //saveVideosData(videosData);
 }
