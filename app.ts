@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import { getVideoData } from "./twitchService";
 import { getLinkFromImage } from "./ocrApiService";
+import * as googleService from "./googleService";
 
 const FROM_LOCAL_JSON = true;
 
@@ -14,6 +15,9 @@ async function main() {
   }
 
   let googleLink = await getLinkFromImage(videosData[41].thumbnail_url);
+  let spreadSheetId = await googleService.getSpreadsheetIdByShortLink(
+    googleLink
+  );
 
   //saveVideosData(videosData);
 }
