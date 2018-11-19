@@ -11,7 +11,7 @@ function parseSpreadsheetId(url: string) {
 // expects to get URL with short link like "goo.gl/MTJreu"
 export async function getSpreadsheetIdByShortLink(url: string) {
   return axios.get("https://" + url, { maxRedirects: 0 }).catch(e => {
-    if (e.response.status === 301 && e.response.headers.location)
+    if (e.response && e.response.status === 301 && e.response.headers.location)
       return parseSpreadsheetId(e.response.headers.location);
     else return null;
   });

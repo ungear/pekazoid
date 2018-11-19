@@ -14,12 +14,24 @@ async function main() {
     saveVideosData(videosData);
   }
 
-  let googleLink = await getLinkFromImage(videosData[41].thumbnail_url);
-  let spreadSheetId = await googleService.getSpreadsheetIdByShortLink(
-    googleLink
-  );
-
-  //saveVideosData(videosData);
+  let finalResult = [];
+  videosData
+    .reduce((result, item) => {
+      return result.then(async _ => {
+        console.log("Processing " + item.id);
+        let googleLink = await getLinkFromImage(item.thumbnail_url);
+        if (googleLink) {
+          let spreadSheetId = await googleService.getSpreadsheetIdByShortLink(
+            googleLink
+          );
+          item.spreadSheetId = spreadSheetId;
+        }
+        finalResult.push(item);
+      });
+    }, Promise.resolve())
+    .then(_ => {
+      saveVideosData(finalResult);
+    });
 }
 
 main();
