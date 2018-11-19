@@ -11,9 +11,11 @@ const axiosInstance = axios.create({
 async function getVideoSourceData(
   cursor?: string
 ): Promise<IGetVideosResponse> {
-  let response = cursor
-    ? await axiosInstance.get("", { params: { after: cursor, first: 100 } })
-    : await axiosInstance.get("", { params: { first: 100 } });
+  let params: any = { first: 50 };
+  if (cursor) {
+    params.after = cursor;
+  }
+  let response = await axiosInstance.get("", params);
   let respData = response.data;
   return respData.data && respData.data.length ? respData : null;
 }
