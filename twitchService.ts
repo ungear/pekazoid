@@ -11,11 +11,11 @@ const axiosInstance = axios.create({
 async function getVideoSourceData(
   cursor?: string
 ): Promise<IGetVideosResponse> {
-  let params: any = { first: 50 };
+  let params: any = { first: 100 };
   if (cursor) {
     params.after = cursor;
   }
-  let response = await axiosInstance.get("", params);
+  let response = await axiosInstance.get("", { params });
   let respData = response.data;
   return respData.data && respData.data.length ? respData : null;
 }
@@ -24,14 +24,19 @@ async function* asyncDataGenerator(): AsyncIterableIterator<ITwitchVideo[]> {
   let cursor: string = null;
   let finish = false;
   while (!finish) {
-    yield await getVideoSourceData(cursor).then(d => {
-      if (d) {
-        cursor = d.pagination.cursor;
-        return d.data;
-      } else {
-        finish = true;
-      }
-    });
+    yield await getVideoSourceData(cursor)
+      /* pause to make less than 30 requests per minute not to exceed twitch limit */
+      // .then(
+      //   (d: IGetVideosResponse) => new Promise(r => setTimeout(_ => r(d), 2100))
+      // )
+      .then((d: IGetVideosResponse) => {
+        if (d) {
+          cursor = d.pagination.cursor;
+          return d.data;
+        } else {
+          finish = true;
+        }
+      });
   }
 }
 
