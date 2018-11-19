@@ -26,10 +26,10 @@ async function main() {
           let spreadSheetId = await googleService.getSpreadsheetIdByShortLink(
             googleLink
           );
-          // finalResult.push({
-          //   twitchVideoId: item.id,
-          //   spreadSheetId: spreadSheetId
-          // });
+          finalResult.push({
+            twitchVideoId: item.id,
+            spreadSheetId: spreadSheetId
+          });
         }
       });
     }, Promise.resolve())
