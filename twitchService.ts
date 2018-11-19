@@ -1,4 +1,5 @@
 import { CONFIG } from "./config";
+import { ITwitchVideo, IGetVideosResponse } from "./typing/twitch";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -7,19 +8,21 @@ const axiosInstance = axios.create({
   headers: { "Client-ID": CONFIG.twitchClientId }
 });
 
-async function getIds(cursor?: string) {
+async function getVideoSourceData(
+  cursor?: string
+): Promise<IGetVideosResponse> {
   let response = cursor
-    ? await axiosInstance.get("", { params: { after: cursor } })
-    : await axiosInstance.get("");
-  let data = response.data;
-  return data.data && data.data.length ? data : null;
+    ? await axiosInstance.get("", { params: { after: cursor, first: 100 } })
+    : await axiosInstance.get("", { params: { first: 100 } });
+  let respData = response.data;
+  return respData.data && respData.data.length ? respData : null;
 }
 
-async function* asyncDataGenerator(): AsyncIterableIterator<any> {
-  let cursor = null;
+async function* asyncDataGenerator(): AsyncIterableIterator<ITwitchVideo[]> {
+  let cursor: string = null;
   let finish = false;
   while (!finish) {
-    yield await getIds(cursor).then(d => {
+    yield await getVideoSourceData(cursor).then(d => {
       if (d) {
         cursor = d.pagination.cursor;
         return d.data;
@@ -30,8 +33,8 @@ async function* asyncDataGenerator(): AsyncIterableIterator<any> {
   }
 }
 
-export async function getVideoData() {
-  let data = [];
+export async function getVideoData(): Promise<ITwitchVideo[]> {
+  let data: ITwitchVideo[] = [];
   let gen = asyncDataGenerator();
   for await (let x of gen) {
     data = data.concat(x);
