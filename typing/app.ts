@@ -1,4 +1,5 @@
-export interface IResult {
-  spreadSheetId: string;
-  twitchVideoId: string;
+import { ITwitchVideo } from "./twitch";
+
+export interface ITwitchVideoProcessed extends ITwitchVideo {
+  spreadSheetId?: string;
 }

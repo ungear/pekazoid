@@ -3,7 +3,7 @@ import { getVideoData } from "./twitchService";
 import { getLinkFromImage } from "./ocrApiService";
 import * as googleService from "./googleService";
 import { ITwitchVideo } from "./typing/twitch";
-import { IResult } from "./typing/app";
+import { ITwitchVideoProcessed } from "./typing/app";
 
 const FROM_LOCAL_JSON = true;
 
@@ -16,23 +16,21 @@ async function main() {
     saveVideosData(videoSourceData);
   }
 
-  let finalResult: IResult[] = [];
+  let finalResult: ITwitchVideoProcessed[] = [];
   videoSourceData
     .reduce((result, item) => {
       return result.then(async _ => {
         console.log("Processing " + item.id);
+        let processedItem: ITwitchVideoProcessed = item;
         let googleLink =
           getLinkFromVideoTitle(item.title) ||
           (await getLinkFromImage(item.thumbnail_url));
         if (googleLink) {
-          let spreadSheetId = await googleService.getSpreadsheetIdByShortLink(
+          processedItem.spreadSheetId = await googleService.getSpreadsheetIdByShortLink(
             googleLink
           );
-          finalResult.push({
-            twitchVideoId: item.id,
-            spreadSheetId: spreadSheetId
-          });
         }
+        finalResult.push(processedItem);
       });
     }, Promise.resolve())
     .then(_ => {
@@ -55,6 +53,6 @@ function saveVideosData(d) {
   fs.writeFileSync("temp-videos.json", JSON.stringify(d));
 }
 
-function saveResult(d: IResult[]) {
+function saveResult(d: ITwitchVideoProcessed[]) {
   fs.writeFileSync("result.json", JSON.stringify(d));
 }
