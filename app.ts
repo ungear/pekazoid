@@ -21,7 +21,8 @@ async function main() {
     .reduce((result, item) => {
       return result.then(async _ => {
         console.log("Processing " + item.id);
-        let googleLink = await getLinkFromImage(item.thumbnail_url);
+        let googleLink = getLinkFromVideoTitle(item.title);
+        //let googleLink = await getLinkFromImage(item.thumbnail_url);
         if (googleLink) {
           let spreadSheetId = await googleService.getSpreadsheetIdByShortLink(
             googleLink
@@ -39,6 +40,12 @@ async function main() {
 }
 
 main();
+
+function getLinkFromVideoTitle(title: string): string {
+  return title.includes("goo.gl/")
+    ? title.replace(/(.*)(goo\.gl\/[A-Za-z0-9]*)(.*)/, "$2")
+    : null;
+}
 
 function saveVideosData(d) {
   fs.writeFileSync("temp-videos.json", JSON.stringify(d));

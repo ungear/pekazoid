@@ -63,3 +63,4 @@ typings/
 /config.ts
 /temp-videos.json
 /credentials.json
+/result.json
