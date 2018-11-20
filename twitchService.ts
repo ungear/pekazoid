@@ -24,7 +24,7 @@ async function* asyncDataGenerator(): AsyncIterableIterator<ITwitchVideo[]> {
   let cursor: string = null;
   let finish = false;
   while (!finish) {
-    yield await getVideoSourceData(cursor)
+    let videos = await getVideoSourceData(cursor)
       /* pause to make less than 30 requests per minute not to exceed twitch limit */
       // .then(
       //   (d: IGetVideosResponse) => new Promise(r => setTimeout(_ => r(d), 2100))
@@ -37,6 +37,8 @@ async function* asyncDataGenerator(): AsyncIterableIterator<ITwitchVideo[]> {
           finish = true;
         }
       });
+
+    if (videos) yield videos;
   }
 }
 
