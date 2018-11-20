@@ -43,9 +43,12 @@ async function main() {
 main();
 
 function getLinkFromVideoTitle(title: string): string {
-  return title.includes("goo.gl/")
-    ? title.replace(/(.*)(goo\.gl\/[A-Za-z0-9]*)(.*)/, "$2")
-    : null;
+  if (title.includes("goo.gl/")) {
+    return title.replace(/(.*)(goo\.gl\/[A-Za-z0-9]*)(.*)/, "$2");
+  }
+  if (title.includes("bit.ly/")) {
+    return title.replace(/(.*)(bit\.ly\/[A-Za-z0-9]*)(.*)/, "$2");
+  }
 }
 
 function saveVideosData(d) {
