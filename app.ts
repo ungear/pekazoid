@@ -21,8 +21,9 @@ async function main() {
     .reduce((result, item) => {
       return result.then(async _ => {
         console.log("Processing " + item.id);
-        let googleLink = getLinkFromVideoTitle(item.title);
-        //let googleLink = await getLinkFromImage(item.thumbnail_url);
+        let googleLink =
+          getLinkFromVideoTitle(item.title) ||
+          (await getLinkFromImage(item.thumbnail_url));
         if (googleLink) {
           let spreadSheetId = await googleService.getSpreadsheetIdByShortLink(
             googleLink
