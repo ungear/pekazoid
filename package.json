@@ -6,6 +6,7 @@
   "dependencies": {
     "@types/axios": "^0.14.0",
     "@types/node": "^10.12.4",
+    "@types/puppeteer": "^1.10.0",
     "axios": "0.18.0",
     "puppeteer": "^1.10.0"
   },

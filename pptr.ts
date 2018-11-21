@@ -1,4 +1,5 @@
-const puppeteer = require("puppeteer");
+import * as puppeteer from "puppeteer";
+import { CONFIG } from "./config";
 
 (async () => {
   // const browser = await puppeteer.launch({
@@ -13,11 +14,11 @@ const puppeteer = require("puppeteer");
   //   // ],
   // });
   const browser = await puppeteer.launch({
-    executablePath: "PATH_TO_CHROME"
+    executablePath: CONFIG.chromePath
   });
   const page = await browser.newPage();
   await page.goto("URL");
-  await delay(3000);
+  await delay(10000);
   await page.screenshot({ path: "example.png" });
 
   await browser.close();
